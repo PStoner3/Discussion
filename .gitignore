@@ -45,3 +45,8 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Local project files and folders
+node_modules
+npm-debug.log
+public/assets/js
