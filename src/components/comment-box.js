@@ -1,4 +1,5 @@
 import React from 'react';
+import jQuery from 'jquery';
 
 import Comment from './comment';
 import CommentForm from './comment-form';

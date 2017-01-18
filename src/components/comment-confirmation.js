@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class CommentRemoveConfirmation extends React.Component {
+export default class CommentConfirmation extends React.Component {
   constructor() {
     super();
 
@@ -32,7 +32,7 @@ export default class CommentRemoveConfirmation extends React.Component {
     } else {
       confirmNode = <a href="" onClick={this
         ._toggleConfirmMessage
-        .bind(this)}>Delete comment?</a>;
+        .bind(this)}>{this.props.children}</a>;
     }
 
     return (
@@ -55,6 +55,10 @@ export default class CommentRemoveConfirmation extends React.Component {
     e.preventDefault();
     this
       .props
-      .onDelete();
+      .onConfirm();
+
+    this.setState({
+      showConfirm: !this.state.showConfirm
+    });
   }
 }
