@@ -6,7 +6,6 @@ import CommentForm from './comment-form';
 import CommentAvatarList from './comment-avatar-list';
 
 export default class CommentBox extends React.Component {
-
   constructor() {
     super();
 
@@ -14,40 +13,16 @@ export default class CommentBox extends React.Component {
       showComments: false,
       comments: []
     };
+
+    this._addComment = this._addComment.bind(this);
   }
 
   componentWillMount() {
     this._fetchComments();
   }
 
-  render() {
-    const comments = this._getComments();
-    return (
-      <div className="row comments-container">
-        <div className="cell">
-          <h2>Join The Discussion</h2>
-          <div className="comment-box">
-            <CommentForm
-              addComment={this
-              ._addComment
-              .bind(this)}/>
-            <CommentAvatarList avatars={this._getAvatars()}/> {this._getPopularMessage(comments.length)}
-            <h3 className="comment-count">{this._getCommentsTitle(comments.length)}</h3>
-            <div className="comment-list">
-              {comments}
-            </div>
-          </div>
-        </div>
-      </div>
-
-    );
-  }
-
   _getAvatars() {
-    return this
-      .state
-      .comments
-      .map(comment => comment.avatarUrl);
+    return this.state.comments.map(comment => comment.avatarUrl);
   }
 
   _getPopularMessage(commentCount) {
@@ -60,19 +35,8 @@ export default class CommentBox extends React.Component {
   }
 
   _getComments() {
-    return this
-      .state
-      .comments
-      .map((comment) => {
-        return <Comment
-          id={comment.id}
-          author={comment.author}
-          body={comment.body}
-          avatarUrl={comment.avatarUrl}
-          onDelete={this
-          ._deleteComment
-          .bind(this)}
-          key={comment.id}/>
+    return this.state.comments.map((comment) => {
+        return (<Comment {...comment} onDelete={this._deleteComment} key={comment.id}/>);
       });
   }
 
@@ -96,10 +60,7 @@ export default class CommentBox extends React.Component {
     };
 
     this.setState({
-      comments: this
-        .state
-        .comments
-        .concat([comment])
+      comments: this.state.comments.concat([comment])
     });
 
   }
@@ -109,17 +70,32 @@ export default class CommentBox extends React.Component {
       method: 'GET',
       url: 'comments.json',
       success: (comments) => {
-        this.setState({comments})
+        this.setState({comments});
       }
     });
   }
 
   _deleteComment(commentID) {
-    const comments = this
-      .state
-      .comments
-      .filter(comment => comment.id !== commentID);
-
+    const comments = this.state.comments.filter(comment => comment.id !== commentID);
     this.setState({comments});
   }
-}
+
+  render() {
+    const comments = this._getComments();
+    return (
+      <div className="row comments-container">
+        <div className="cell">
+          <h2>Join The Discussion</h2>
+          <div className="comment-box">
+            <CommentForm addComment={this._addComment}/>
+            <CommentAvatarList avatars={this._getAvatars()}/> {this._getPopularMessage(comments.length)}
+            <h3 className="comment-count">{this._getCommentsTitle(comments.length)}</h3>
+            <div className="comment-list">
+              {comments}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+}   

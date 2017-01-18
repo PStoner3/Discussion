@@ -9,6 +9,19 @@ export default class Comment extends React.Component {
     this.state = {
       isAbusive: false
     };
+
+    this._toggleAbuse = this._toggleAbuse.bind(this);
+    this._handleDelete = this._handleDelete.bind(this);
+  }
+ 
+  _toggleAbuse() {
+    this.setState({
+      isAbusive: !this.state.isAbusive
+    });
+  }
+
+  _handleDelete() {
+    this.props.onDelete(this.props.id);
   }
 
   render() {
@@ -30,32 +43,22 @@ export default class Comment extends React.Component {
         <p className="comment-body">{commentBody}</p>
 
         <div className="comment-actions">
-          <CommentConfirmation
-            onConfirm={this
-            ._handleDelete
-            .bind(this)}>
+          <CommentConfirmation onConfirm={this._handleDelete}>
             Delete Comment?
           </CommentConfirmation>
-          <CommentConfirmation
-            onConfirm={this
-            ._toggleAbuse
-            .bind(this)}>
+          <CommentConfirmation onConfirm={this._toggleAbuse}>
             Report as Abuse
           </CommentConfirmation>
         </div>
       </div>
     );
   }
-
-  _toggleAbuse() {
-    this.setState({
-      isAbusive: !this.state.isAbusive
-    });
-  }
-
-  _handleDelete() {
-    this
-      .props
-      .onDelete(this.props.id);
-  }
 }
+
+Comment.propTypes = {
+  onDelete: React.PropTypes.func.isRequired,
+  id: React.PropTypes.number,
+  body: React.PropTypes.string,
+  author: React.PropTypes.string,
+  avatarUrl: React.PropTypes.string
+};

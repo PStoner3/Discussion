@@ -16,20 +16,19 @@ const sync = browserSync.create();
 
 // Input file.
 watchify.args.debug = true;
-var bundler = browserify('src/app.js', watchify.args);
+let bundler = browserify('src/app.js', watchify.args);
 
 // Babel transform
-bundler.transform(babelify.configure({
-  sourceMapRelative: 'src'
-}));
+bundler.transform(babelify.configure({sourceMapRelative: 'src'}));
 
 // On updates recompile
 bundler.on('update', bundle);
 
 function bundle() {
-  return bundler.bundle()
-    .on('error', function(error){
-      console.error( '\nError: ', error.message, '\n');
+  return bundler
+    .bundle()
+    .on('error', function (error) {
+      console.error('\nError: ', error.message, '\n'); //eslint-disable-line no-console
       this.emit('end');
     })
     .pipe(exorcist('public/assets/js/bundle.js.map'))
@@ -44,13 +43,17 @@ gulp.task('default', ['transpile']);
 gulp.task('transpile', ['lint'], () => bundle());
 
 gulp.task('lint', () => {
-    return gulp.src(['src/**/*.js', 'gulpfile.babel.js'])
-      .pipe(eslint())
-      .pipe(eslint.format())
+  return gulp
+    .src(['src/**/*.js', 'gulpfile.babel.js'])
+    .pipe(eslint())
+    .pipe(eslint.format());
 });
 
 gulp.task('serve', ['transpile'], () => sync.init({
   server: 'public',
+  browser: [
+    "chrome" //, "microsoft-edge:http://localhost:8000"
+  ],
   port: process.env.PORT || 8000,
   host: process.env.IP || 'localhost'
 }));
@@ -58,7 +61,7 @@ gulp.task('serve', ['transpile'], () => sync.init({
 gulp.task('js-watch', ['transpile'], () => sync.reload());
 
 gulp.task('watch', ['serve'], () => {
-  gulp.watch('src/**/*', ['js-watch'])
-  gulp.watch('public/assets/style.css', sync.reload)
-  gulp.watch('public/index.html', sync.reload)
+  gulp.watch('src/**/*', ['js-watch']);
+  gulp.watch('public/assets/style.css', sync.reload);
+  gulp.watch('public/index.html', sync.reload);
 });

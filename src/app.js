@@ -4,7 +4,7 @@ import jQuery from 'jquery';
 
 import CommentBox from './components/comment-box';
 
-jQuery(function () {
+jQuery(function() {
   ReactDOM.render(
-    <CommentBox/>, document.getElementById('comment-box'));
-})
+    <CommentBox />, document.getElementById('comment-box'));
+});
